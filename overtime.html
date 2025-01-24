@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>야근 기록</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+</head>
+<body>
+    <header>
+        야근 기록 관리
+    </header>
+    <div class="banner">
+        <img src="images/logo.png" alt="DSI System Logo">
+    </div>
+    <nav>
+        <a href="/home">Home</a>
+        <a href="/form">Form</a>
+        <a href="/about">About</a>
+        <a href="/overtime">Overtime</a>
+        <a href="/login" onclick="logout(event)">로그아웃</a>
+    </nav>
+
+    <div class="container">
+        <h1>야근 기록</h1>
+        <!-- 입력 폼 -->
+        <form id="overtime-form">
+            <label for="employeeName">직원 이름:</label>
+            <input type="text" id="employeeName" name="employeeName" placeholder="직원 이름을 입력하세요" required>
+
+            <label for="startTime">시작 시간:</label>
+            <input type="datetime-local" id="startTime" name="startTime" required>
+
+            <label for="endTime">종료 시간:</label>
+            <input type="datetime-local" id="endTime" name="endTime" required>
+
+            <button type="submit">기록 저장</button>
+        </form>
+    </div>
+    <footer>
+        &copy; 2025 데이터 관리 시스템
+    </footer>
+
+    <script>
+
+        // 폼 제출 이벤트
+        document.getElementById("overtime-form").addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const employeeName = document.getElementById("employeeName").value;
+            const startTime = document.getElementById("startTime").value;
+            const endTime = document.getElementById("endTime").value;
+
+            const response = await fetch("/overtime-submit", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ employeeName, startTime, endTime }),
+            });
+
+            if (response.ok) {
+                alert("야근 기록이 저장되었습니다.");
+                fetchOvertimeData(); // 테이블 업데이트
+                document.getElementById("overtime-form").reset(); // 폼 초기화
+            } else {
+                alert("야근 기록 저장에 실패했습니다.");
+            }
+        });
+
+        // 페이지 로드 시 데이터 불러오기
+        window.onload = fetchOvertimeData;
+    </script>
+</body>
+</html>

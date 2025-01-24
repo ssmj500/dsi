@@ -1,0 +1,134 @@
+/* 기본 설정 */
+body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* 컨테이너 */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 헤더 스타일 */
+header {
+    background-color: #800000; /* 로고 색상 */
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* 배너 스타일 */
+.banner {
+    background-color: #ffe6e6; /* 로고 색상과 조화를 이루는 연한 배경색 */
+    text-align: center;
+    padding: 20px 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.banner img {
+    max-width: 100%;
+    height: auto;
+    max-height: 100px;
+}
+
+/* 네비게이션 바 */
+nav {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #f2f2f2;
+    margin-bottom: 20px;
+}
+
+nav a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #800000; /* 로고 색상 */
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* 버튼 스타일 */
+button {
+    background-color: #800000; /* 로고 색상 */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #660000; /* 더 진한 빨간색 */
+}
+
+/* 입력 필드 스타일 */
+form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="datetime-local"],
+form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #f9f9f9;
+}
+
+form textarea {
+    resize: none;
+    height: 120px;
+}
+
+/* 테이블 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th,
+table td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #ffe6e6; /* 연한 배경색 */
+    color: #800000; /* 로고 색상 */
+    font-weight: bold;
+}
+
+/* 푸터 */
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #f2f2f2;
+    color: #666;
+    margin-top: 20px;
+    font-size: 14px;
+}

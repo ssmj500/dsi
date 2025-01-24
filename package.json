@@ -1,0 +1,19 @@
+{
+  "name": "dsiweb",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "exceljs": "^4.4.0",
+    "express": "^4.21.2",
+    "glob": "^11.0.1",
+    "googleapis": "^144.0.0",
+    "rimraf": "^6.0.1",
+    "xlsx": "^0.18.5"
+  }
+}

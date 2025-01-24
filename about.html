@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+</head>
+<body>
+    <header>
+        데이터 조회
+    </header>
+    <nav>
+        <a href="/home">Home</a>
+        <a href="/form">Form</a>
+        <a href="/about">About</a>
+        <a href="/overtime">Overtime</a>
+        <a href="/login" onclick="logout(event)">로그아웃</a>
+    </nav>
+
+    <div class="banner">
+        <img src="images/logo.png" alt="DSI System Logo">
+    </div>
+
+    <div class="container">
+        <h1>저장된 데이터</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>분류</th>
+                    <th>매장명</th>
+                    <th>고객명</th>
+                    <th>인입시간</th>
+                    <th>내용</th>
+                    <th>조치사항</th>
+                    <th>종료시간</th>
+                </tr>
+            </thead>
+            <tbody id="data-table">
+                <!-- 데이터가 동적으로 추가됩니다 -->
+            </tbody>
+        </table>
+    </div>
+    <footer>
+        &copy; DSI 관리 시스템
+    </footer>
+</body>
+</html>
