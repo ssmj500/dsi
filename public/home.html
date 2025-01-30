@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        데이터 관리 시스템
+        <!-- 시계 요소 -->
+        <div id="clock"></div>
+    </header>
+    <nav class="navbar">
+        <ul class="nav-list">
+            <li class="nav-item"><a href="/home" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="/form" class="nav-link">Form</a></li>
+            <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="/overtime" class="nav-link">Overtime</a></li>
+            <li class="nav-item"><a href="/installation" class="nav-link">installation</a></li>
+            <li class="nav-item"><a href="/board" class="nav-link">Board</a></li>
+            <li class="nav-item"><a href="/login" class="nav-link" onclick="logout(event)">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>DSISYSTEM</h1>
+        <p id="welcome-message">안녕하세요, 사용자님!</p>
+
+        <!-- 최근 데이터 요약 -->
+        <div class="summary">
+            <h2>최근 데이터 요약</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>분류</th>
+                        <th>매장명</th>
+                        <th>고객명</th>
+                    </tr>
+                </thead>
+                <tbody id="recent-data">
+                    <!-- 데이터가 동적으로 추가됩니다 -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 통계 차트 -->
+        <div class="chart-container">
+            <h2>분류별 데이터 통계</h2>
+            <canvas id="categoryChart" width="400" height="200"></canvas>
+        </div>
+
+        <!-- 빠른 액션 버튼 -->
+        <div class="quick-actions">
+            <h2>빠른 액션</h2>
+            <button onclick="location.href='/form'">새 데이터 입력</button>
+            <button onclick="location.href='/overtime'">야근 기록 추가</button>
+        </div>
+    </div>
+    <footer>
+        &copy; 2025 데이터 관리 시스템
+    </footer>
+
+    <script src="js/clock.js"></script>
+    <script>
+        // 사용자 이름 설정
+        const userName = "홍길동"; // 임시 사용자 이름
+        document.getElementById("welcome-message").textContent = `안녕하세요, ${userName}님!`;
+
+        // 최근 데이터 요약 (가짜 데이터)
+        const recentData = [
+            { category: "장애", storeName: "DSI 본점", customerName: "김철수" },
+            { category: "문의", storeName: "DSI 지점", customerName: "이영희" },
+            { category: "클레임", storeName: "DSI 본점", customerName: "박준수" },
+        ];
+        const recentDataContainer = document.getElementById("recent-data");
+        recentData.forEach(data => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${data.category}</td>
+                <td>${data.storeName}</td>
+                <td>${data.customerName}</td>
+            `;
+            recentDataContainer.appendChild(row);
+        });
+
+        // 차트 데이터 (가짜 데이터)
+        const chartData = {
+            labels: ["장애", "문의", "클레임"],
+            datasets: [{
+                label: "분류별 데이터 건수",
+                data: [5, 10, 3], // 가짜 데이터
+                backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+                borderColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+                borderWidth: 1
+            }]
+        };
+
+        // 막대형 차트 생성
+        const ctx = document.getElementById("categoryChart").getContext("2d");
+        new Chart(ctx, {
+            type: "bar",
+            data: chartData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: true
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: "분류",
+                        },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "건수",
+                        },
+                    },
+                },
+            },
+        });
+    </script>
+</body>
+</html>

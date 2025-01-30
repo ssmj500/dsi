@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>야근 기록</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <style>
+        /* 스타일 추가 */
+        .stamp-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .stamp-button:hover {
+            background-color: #218838;
+        }
+
+        form label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        form input {
+            margin-bottom: 15px;
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        form button {
+            margin-top: 10px;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        야근 기록 관리
+        <!-- 시계 요소 추가 -->
+        <div id="clock"></div>
+    </header>
+    <nav class="navbar">
+        <ul class="nav-list">
+            <li class="nav-item"><a href="/home" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="/form" class="nav-link">Form</a></li>
+            <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="/overtime" class="nav-link">Overtime</a></li>
+            <li class="nav-item"><a href="/installation" class="nav-link">installation</a></li>
+            <li class="nav-item"><a href="/board" class="nav-link">Board</a></li>
+            <li class="nav-item"><a href="/login" class="nav-link" onclick="logout(event)">Logout</a></li>
+        </ul>
+    </nav>
+
+
+    <div class="container">
+        <h1>야근 기록</h1>
+        <!-- 입력 폼 -->
+        <form id="overtime-form">
+            <label for="employeeName">직원 이름:</label>
+            <input type="text" id="employeeName" name="employeeName" placeholder="직원 이름을 입력하세요" required>
+
+            <label for="startTime">시작 시간:</label>
+            <div>
+                <input type="datetime-local" id="startTime" name="startTime" required>
+            </div>
+
+            <label for="endTime">종료 시간:</label>
+            <div>
+                <input type="datetime-local" id="endTime" name="endTime" required>
+                <button type="button" class="stamp-button" onclick="setTimestamp('endTime')">Stamp</button>
+            </div>
+
+            <button type="submit">기록 저장</button>
+        </form>
+    </div>
+    <footer>
+        &copy; 2025 데이터 관리 시스템
+    </footer>
+    <script src="js/clock.js"></script>
+    <script>
+        // 타임스탬프를 현재 시간으로 설정하는 함수
+        function setTimestamp(fieldId) {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, "0");
+            const date = String(now.getDate()).padStart(2, "0");
+            const hours = String(now.getHours()).padStart(2, "0");
+            const minutes = String(now.getMinutes()).padStart(2, "0");
+
+            const timestamp = `${year}-${month}-${date}T${hours}:${minutes}`;
+            document.getElementById(fieldId).value = timestamp;
+        }
+
+        // 폼 제출 이벤트
+        document.getElementById("overtime-form").addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const employeeName = document.getElementById("employeeName").value;
+            const startTime = document.getElementById("startTime").value;
+            const endTime = document.getElementById("endTime").value;
+
+            const response = await fetch("/overtime-submit", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ employeeName, startTime, endTime }),
+            });
+
+            if (response.ok) {
+                alert("야근 기록이 저장되었습니다.");
+                document.getElementById("overtime-form").reset(); // 폼 초기화
+            } else {
+                alert("야근 기록 저장에 실패했습니다.");
+            }
+        });
+
+    </script>
+</body>
+</html>

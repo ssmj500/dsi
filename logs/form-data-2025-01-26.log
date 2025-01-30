@@ -1,0 +1,11 @@
+{"timestamp":"2025-01-26T05:51:50.282Z","status":{"category":"메뉴수정 문의","storeName":"박경석","customerName":"박경석","startTime":"2025-01-26T14:51","content":"박경석","actions":"박경석","endTime":"2025-01-26T14:51"},"error":null}
+{"timestamp":"2025-01-26T06:14:26.385Z","status":{"category":"테스트","storeName":"테스트","customerName":"테스트","startTime":"2025-01-26T06:13","content":"테스트","actions":"","endTime":"2025-01-26T06:14"},"error":null}
+{"timestamp":"2025-01-26T06:31:06.201Z","status":{"category":"","storeName":"","customerName":"","startTime":"2025-01-26T15:30","content":"","actions":"","endTime":"2025-01-26T15:30"},"error":null}
+{"timestamp":"2025-01-26T06:38:12.096Z","status":{"category":"q","storeName":"1","customerName":"1","startTime":"2025-01-26T15:38","content":"1","actions":"1","endTime":"2025-01-26T15:38"},"error":null}
+{"timestamp":"2025-01-26T06:39:16.399Z","status":{"category":"","storeName":"","customerName":"","startTime":"2025-01-26T15:39","content":"","actions":"","endTime":"2025-01-26T15:39"},"error":null}
+{"timestamp":"2025-01-26T06:39:27.984Z","status":{"category":"1","storeName":"1","customerName":"1","startTime":"2025-01-26T15:39","content":"1","actions":"1","endTime":"2025-01-26T15:39"},"error":null}
+{"timestamp":"2025-01-26T06:39:42.736Z","status":{"category":"1","storeName":"1","customerName":"1","startTime":"2025-01-26T15:39","content":"1","actions":"1","endTime":"2025-01-26T15:39"},"error":null}
+{"timestamp":"2025-01-26T07:45:51.500Z","status":{"category":"테스트","storeName":"테스트","customerName":"테스트","startTime":"2025-01-26T07:45","content":"테스트","actions":"테스트","endTime":"2025-01-26T07:45"},"error":null}
+{"timestamp":"2025-01-26T15:08:18.923Z","status":{"category":"장애","storeName":"테스트","customerName":"테스트","startTime":"2025-01-27T00:08","content":"테스트","actions":"테스트","endTime":"2025-01-27T00:08"},"error":null}
+{"timestamp":"2025-01-26T15:10:39.164Z","status":{"category":"테스트","storeName":"테스트","customerName":"테스트","startTime":"2025-01-27T00:10","content":"테스트","actions":"테스트","endTime":"2025-01-27T00:10"},"error":null}
+{"timestamp":"2025-01-26T15:11:25.864Z","status":{"category":"장애","storeName":"박경석","customerName":"박경석","startTime":"2025-01-27T00:11","content":"박경석","actions":"박경석","endTime":"2025-01-27T00:11","loggedInUser":"admin"},"error":null}

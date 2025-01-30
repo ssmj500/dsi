@@ -1,0 +1,186 @@
+/* 기본 설정 */
+body {
+    font-family: "Roboto", "Helvetica Neue", Arial, sans-serif; /* Google Fonts */
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: hsl(0, 0%, 20%);
+}
+
+/* 컨테이너 */
+.container {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 헤더 스타일 */
+header {
+    background-color: #800000;
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* 배너 스타일 */
+.banner {
+    background-color: #ffe6e6;
+    text-align: center;
+    padding: 20px 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.banner img {
+    max-width: 100%;
+    height: auto;
+    max-height: 100px;
+}
+
+/* 네비게이션 바 스타일 */
+.navbar {
+    background-color: #800000; /* 헤더와 동일한 색상 */
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.nav-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-item {
+    position: relative;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.nav-link:hover {
+    background-color: #660000; /* 더 진한 빨강 */
+    transform: scale(1.05); /* 살짝 확대 효과 */
+}
+
+.nav-link.active {
+    background-color: #ffe6e6; /* 활성화된 메뉴 강조 */
+    color: #800000; /* 글자색 변경 */
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .nav-list {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .nav-link {
+        text-align: center;
+        display: block;
+    }
+}
+
+
+/* 버튼 스타일 */
+button {
+    background-color: #800000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #660000;
+}
+
+/* 입력 필드 스타일 */
+form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="datetime-local"],
+form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #f9f9f9;
+}
+
+form textarea {
+    resize: none;
+    height: 120px;
+}
+
+/* 테이블 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th,
+table td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #ffe6e6;
+    color: #800000;
+    font-weight: bold;
+}
+
+/* 푸터 */
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #f2f2f2;
+    color: #666;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+/* 디지털 시계 */
+#clock {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #800000;
+    background-color: #f9f9f9;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}

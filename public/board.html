@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 250px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        .modal-content input, .modal-content textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .modal-content button {
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .save-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+        .action-btn {
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .edit-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        .edit-btn:hover {
+            background-color: #0056b3;
+        }
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+        .new-post-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .new-post-btn:hover {
+            background-color: #0056b3;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .pagination button {
+            padding: 5px 10px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            background-color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .pagination button.active {
+            background-color: #007bff;
+            color: white;
+        }
+        .pagination button:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        데이터 관리 시스템 - 게시판
+        <div id="clock"></div>
+    </header>
+    <nav class="navbar">
+        <ul class="nav-list">
+            <li class="nav-item"><a href="/home" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="/form" class="nav-link">Form</a></li>
+            <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="/overtime" class="nav-link">Overtime</a></li>
+            <li class="nav-item"><a href="/installation" class="nav-link">installation</a></li>
+            <li class="nav-item"><a href="/board" class="nav-link">Board</a></li>
+            <li class="nav-item"><a href="/login" class="nav-link" onclick="logout(event)">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>게시판</h1>
+        <button class="new-post-btn" id="new-post-btn">신규</button>
+        <div class="modal" id="new-post-modal">
+            <div class="modal-content">
+                <h2>게시글 작성</h2>
+                <input type="text" id="post-title" placeholder="제목" required>
+                <textarea id="post-content" placeholder="내용" rows="5" required></textarea>
+                <button class="save-btn" id="save-post-btn">저장</button>
+                <button class="cancel-btn" id="cancel-post-btn">취소</button>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                    <th>작업</th>
+                </tr>
+            </thead>
+            <tbody id="board-data"></tbody>
+        </table>
+        <div class="pagination" id="pagination"></div>
+    </div>
+
+    <footer>
+        &copy; 2025 데이터 관리 시스템
+    </footer>
+
+    <script src="js/clock.js"></script>
+    <script>
+        const boardDataContainer = document.getElementById("board-data");
+        const paginationContainer = document.getElementById("pagination");
+        const newPostBtn = document.getElementById("new-post-btn");
+        const modal = document.getElementById("new-post-modal");
+        const savePostBtn = document.getElementById("save-post-btn");
+        const cancelPostBtn = document.getElementById("cancel-post-btn");
+        const postTitle = document.getElementById("post-title");
+        const postContent = document.getElementById("post-content");
+
+        const postsPerPage = 10;
+        let currentPage = 1;
+        let allPosts = [];
+
+        // 신규 버튼 클릭
+        newPostBtn.addEventListener("click", () => {
+            modal.style.display = "flex";
+            postTitle.value = "";
+            postContent.value = "";
+        });
+
+        // 취소 버튼 클릭
+        cancelPostBtn.addEventListener("click", () => {
+            modal.style.display = "none";
+        });
+
+        // 모달 외부 클릭 시 닫기
+        window.addEventListener("click", (event) => {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+
+        // 게시글 데이터 로드 및 렌더링
+        async function fetchBoardData() {
+            try {
+                const response = await fetch("/board-data");
+                const posts = await response.json();
+                allPosts = posts;
+                renderBoardData();
+                renderPagination();
+            } catch (error) {
+                console.error("게시판 데이터 가져오기 실패:", error);
+                alert("게시판 데이터를 가져오는 중 오류가 발생했습니다.");
+            }
+        }
+
+        function renderBoardData() {
+            boardDataContainer.innerHTML = "";
+            const startIndex = (currentPage - 1) * postsPerPage;
+            const endIndex = startIndex + postsPerPage;
+            const currentPosts = allPosts.slice(startIndex, endIndex);
+            currentPosts.forEach((post, index) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${startIndex + index + 1}</td>
+                    <td>${post.title}</td>
+                    <td>${post.author}</td>
+                    <td>${post.date}</td>
+                    <td>
+                        <button class="edit-btn action-btn" onclick="editPost(${post.id})">수정</button>
+                        <button class="delete-btn action-btn" onclick="deletePost(${post.id})">삭제</button>
+                    </td>
+                `;
+                boardDataContainer.appendChild(row);
+            });
+        }
+
+        function renderPagination() {
+            paginationContainer.innerHTML = "";
+            const totalPages = Math.ceil(allPosts.length / postsPerPage);
+            if (totalPages === 0) return;
+
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement("button");
+                button.textContent = i;
+                button.classList.add("page-btn");
+                if (i === currentPage) {
+                    button.classList.add("active");
+                }
+                button.addEventListener("click", () => {
+                    currentPage = i;
+                    renderBoardData();
+                    renderPagination();
+                });
+                paginationContainer.appendChild(button);
+            }
+        }
+        // 게시글 삭제
+    async function deletePost(id) {
+        if (confirm("이 게시글을 삭제하시겠습니까?")) {
+            try {
+                const response = await fetch(`/board-delete/${id}`, { method: "DELETE" });
+                if (response.ok) {
+                    alert("게시글이 삭제되었습니다.");
+                    allPosts = allPosts.filter(post => post.id !== id); // 삭제 후 배열에서 제거
+                    renderBoardData();
+                    renderPagination();
+                } else {
+                    alert("게시글 삭제에 실패했습니다.");
+                }
+            } catch (error) {
+                console.error("게시글 삭제 중 오류가 발생했습니다:", error);
+                alert("삭제 중 오류가 발생했습니다.");
+            }
+        }
+    }
+    // 게시글 수정
+    function editPost(id) {
+        const post = allPosts.find(p => p.id === id);
+        if (post) {
+            modal.style.display = "flex";
+            postTitle.value = post.title;
+            postContent.value = post.content;
+
+            savePostBtn.onclick = async () => {
+                if (postTitle.value && postContent.value) {
+                    try {
+                        const updatedPost = {
+                            id: post.id,
+                            title: postTitle.value,
+                            content: postContent.value,
+                            author: post.author,
+                            date: post.date,
+                        };
+
+                        const response = await fetch(`/board-edit/${id}`, {
+                            method: "PUT",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(updatedPost),
+                        });
+
+                        if (response.ok) {
+                            alert("게시글이 수정되었습니다.");
+                            const updatedPostIndex = allPosts.findIndex(p => p.id === id);
+                            allPosts[updatedPostIndex] = updatedPost; // 배열 데이터 업데이트
+                            modal.style.display = "none";
+                            renderBoardData();
+                            renderPagination();
+                        } else {
+                            alert("게시글 수정에 실패했습니다.");
+                        }
+                    } catch (error) {
+                        console.error("게시글 수정 중 오류가 발생했습니다:", error);
+                    }
+                } else {
+                    alert("제목과 내용을 입력하세요.");
+                }
+            };
+        }
+    }
+
+
+
+        fetchBoardData();
+    </script>
+</body>
+</html>

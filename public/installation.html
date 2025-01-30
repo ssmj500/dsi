@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>설치일정등록</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: none;
+            height: 100px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            white-space: normal; /* 줄바꿈 허용 */
+            width: 100px; /* 각 항목 너비 통일 */
+            font-size: 14px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        button {
+            width: 48%;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            border: none;
+        }
+
+        .save-button {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .save-button:hover {
+            background-color: #0056b3;
+        }
+
+        .reset-button {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .reset-button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<!-- 시계 요소 추가 -->
+<div id="clock"></div>
+<body>
+    <header>데이터 입력 폼</header>
+    <nav class="navbar">
+        <ul class="nav-list">
+            <li class="nav-item"><a href="/home" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="/form" class="nav-link">Form</a></li>
+            <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="/overtime" class="nav-link">Overtime</a></li>
+            <li class="nav-item"><a href="/installation" class="nav-link">installation</a></li>
+            <li class="nav-item"><a href="/board" class="nav-link">Board</a></li>
+            <li class="nav-item"><a href="/login" class="nav-link" onclick="logout(event)">Logout</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>설치일정등록</h1>
+        <form id="new-data-form">
+            <div class="form-group">
+                <label for="storeName">매장명</label>
+                <input type="text" id="storeName" name="storeName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="ownerName">점주명</label>
+                <input type="text" id="ownerName" name="ownerName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="product">설치상품</label>
+                <select id="product" name="product" required>
+                    <option value="--">--</option>
+                    <option value="포스">포스</option>
+                    <option value="키오스크">키오스크</option>
+                    <option value="포스+키오스크">포스+키오스크</option>
+                    <option value="포스+오더(선불)">포스+오더(선불)</option>
+                    <option value="포스+오더(후불)">포스+오더(후불)</option>
+                    <option value="오더(선불)">오더(선불)</option>
+                    <option value="오더(후불)">오더(후불)</option>
+                    <option value="포스+키오스크+오더(선불/후불)">포스+키오스크+오더(선불/후불)</option>
+                    <option value="추가설치">추가설치</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="van-company">VAN사</label>
+                <select id="van-company" name="vanCompany" required>
+                    <option value="--">--</option>
+                    <option value="KPN">KPN</option>
+                    <option value="KIS">KIS</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>원격업무구간</label>
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="remote" value="서류취합 완료"> 서류취합 완료</label>
+                        <label><input type="checkbox" name="remote" value="가맹점심사 완료"> 가맹점심사 완료</label>
+                        <label><input type="checkbox" name="remote" value="전산등록 완료"> 전산등록 완료</label>
+                        <label><input type="checkbox" name="remote" value="메뉴등록 완료"> 메뉴등록 완료</label>
+                        <label><input type="checkbox" name="remote" value="오더 연동신청 O"> 오더 연동신청 O</label>
+                        <label><input type="checkbox" name="remote" value="오더 연동신청 X"> 오더 연동신청 X</label>
+                        <label><input type="checkbox" name="remote" value="타스크 완료"> 타스크 완료</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="installDate">설치일자</label>
+                <input type="date" id="installDate" name="installDate" required>
+            </div>
+
+            <div class="form-group">
+                <label for="notes">특이사항</label>
+                <textarea id="notes" name="notes" rows="4"></textarea>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="save-button">저장</button>
+                <button type="reset" class="reset-button">초기화</button>
+            </div>
+        </form>
+    </div>
+    <script src="js/clock.js"></script>
+    <script>
+        document.getElementById('new-data-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = {
+                storeName: document.getElementById('storeName').value,
+                ownerName: document.getElementById('ownerName').value,
+                product: document.getElementById('product').value,
+                vanCompany: document.getElementById('van-company').value,
+                installDate: document.getElementById('installDate').value,
+                notes: document.getElementById('notes').value,
+                remoteInterval: Array.from(document.querySelectorAll("input[name='remote']:checked"))
+                                     .map(checkbox => checkbox.value)
+                                     .join(', ')
+            };
+
+            try {
+                const response = await fetch('/new-data-submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                if (response.ok) {
+                    alert('데이터가 성공적으로 저장되었습니다!');
+                    document.getElementById('new-data-form').reset();
+                } else {
+                    alert('데이터 저장에 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('데이터 저장 중 오류가 발생했습니다.', error);
+            }
+        });
+    </script>
+</body>
+</html>

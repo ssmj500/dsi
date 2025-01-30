@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <style>
+        .container {
+            max-width: 2000px;
+            margin: 10px;
+            padding: 50px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group label {
+          display: block;
+          font-weight: bold;
+          margin-bottom: 5px;
+        }
+
+        .form-group select {
+         width: 100%;
+         padding: 8px;
+         border: 1px solid #ddd;
+         border-radius: 5px;
+        }    
+
+        .top-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .top-buttons button {
+            background-color: #800000;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .top-buttons button:hover {
+            background-color: #660000;
+        }
+
+        #form-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .form-container {
+            flex: 1 1 calc(50% - 20px);
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-sizing: border-box;
+        }
+
+        .form-container label {
+            font-weight: bold;
+        }
+
+        .form-container input,
+        .form-container textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        textarea {
+            resize: none;
+            height: 60px;
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+        }
+
+        .row > div {
+            flex: 1;
+        }
+
+        .stamp-button,
+        .save-button,
+        .temp-save-button,
+        .delete-button {
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .stamp-button {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .stamp-button:hover {
+            background-color: #218838;
+        }
+
+        .save-button {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .save-button:hover {
+            background-color: #0056b3;
+        }
+
+        .temp-save-button {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .temp-save-button:hover {
+            background-color: #e0a800;
+        }
+
+        .delete-button {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .delete-button:hover {
+            background-color: #c82333;
+        }
+
+        /* 모달 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content button {
+            margin: 10px;
+        }
+    </style>
+</head>
+<!-- 시계 요소 추가 -->
+<div id="clock"></div>
+
+<body>
+    <header>데이터 입력 폼</header>
+    <nav class="navbar">
+        <ul class="nav-list">
+            <li class="nav-item"><a href="/home" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="/form" class="nav-link">Form</a></li>
+            <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="/overtime" class="nav-link">Overtime</a></li>
+            <li class="nav-item"><a href="/installation" class="nav-link">installation</a></li>
+            <li class="nav-item"><a href="/board" class="nav-link">Board</a></li>
+            <li class="nav-item"><a href="/login" class="nav-link" onclick="logout(event)">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="top-buttons">
+            <button id="add-form-btn">신규</button>
+        </div>
+        <div id="form-area"></div>
+    </div>
+
+    <!-- 모달 -->
+    <div id="delete-modal" class="modal">
+        <div class="modal-content">
+            <p>정말로 삭제하시겠습니까?</p>
+            <button id="confirm-delete-btn">확인</button>
+            <button id="cancel-delete-btn">취소</button>
+        </div>
+    </div>
+
+    <footer>&copy; 데이터 관리 시스템</footer>
+    <script src="js/clock.js"></script>
+    <script>
+        const formArea = document.getElementById("form-area");
+        const addFormButton = document.getElementById("add-form-btn");
+        const deleteModal = document.getElementById("delete-modal");
+        const confirmDeleteBtn = document.getElementById("confirm-delete-btn");
+        const cancelDeleteBtn = document.getElementById("cancel-delete-btn");
+        let formCount = 0;
+        const MAX_FORMS = 10;
+        let currentFormToDelete = null;
+
+        function getCurrentTimestamp() {
+            const now = new Date();
+            return now.toISOString().slice(0, 16);
+        }
+        // 현재 날짜와 시간을 "yyyy-MM-ddTHH:mm" 형식으로 반환하는 함수
+        function getCurrentTimestamp() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, "0");
+            const date = String(now.getDate()).padStart(2, "0");
+            const hours = String(now.getHours()).padStart(2, "0");
+            const minutes = String(now.getMinutes()).padStart(2, "0");
+            return `${year}-${month}-${date}T${hours}:${minutes}`;
+        } 
+
+
+        function generateFormId() {
+            return `form_${Date.now()}`;
+        }
+
+        function saveFormToLocalStorage(formId, formData) {
+            const savedForms = JSON.parse(localStorage.getItem("tempForms") || "{}");
+            savedForms[formId] = formData;
+            localStorage.setItem("tempForms", JSON.stringify(savedForms));
+        }
+
+        function deleteFormFromLocalStorage(formId) {
+            const savedForms = JSON.parse(localStorage.getItem("tempForms") || "{}");
+            delete savedForms[formId];
+            localStorage.setItem("tempForms", JSON.stringify(savedForms));
+        }
+
+        function loadFormsFromLocalStorage() {
+            const savedForms = JSON.parse(localStorage.getItem("tempForms") || "{}");
+            Object.entries(savedForms).forEach(([formId, formData]) => {
+                addForm(formData, formId);
+            });
+        }
+
+        function addForm(data = {}, formId = generateFormId()) {
+            if (formCount >= MAX_FORMS) {
+                alert("최대 10개의 폼만 생성할 수 있습니다.");
+                return;
+            }
+
+            const formTemplate = document.createElement("div");
+            formTemplate.className = "form-container";
+            formTemplate.dataset.formId = formId;
+            formTemplate.innerHTML = `
+                <form class="data-form">
+                    <div class="form-group">
+                        <div>
+                            <label for="category">분류:</label>
+                            <select name="category" id="category" required>
+                            <option value="--" ${data.category === "--" ? "selected" : ""}>--</option>
+                            <option value="POS/KIOSK 문의" ${data.category === "POS/KIOSK 문의" ? "selected" : ""}>POS/KIOSK 문의</option>
+                            <option value="POS/KIOSK 장애" ${data.category === "POS/KIOSK 장애" ? "selected" : ""}>POS/KIOSK 장애</option>
+                            <option value="POS/KIOSK 설정" ${data.category === "POS/KIOSK 설정" ? "selected" : ""}>POS/KIOSK 설정</option>
+                            <option value="U+ order 문의" ${data.category === "U+ order 문의" ? "selected" : ""}>U+ order 문의</option>
+                            <option value="U+ order 설정" ${data.category === "U+ order 설정" ? "selected" : ""}>U+ order 설정</option>
+                            <option value="U+ order 장애" ${data.category === "U+ order 장애" ? "selected" : ""}>U+ order 장애</option>
+                            <option value="메뉴설정" ${data.category === "메뉴설정" ? "selected" : ""}>메뉴설정</option>
+                            <option value="영업대리점 문의" ${data.category === "영업대리점 문의" ? "selected" : ""}>영업대리점 문의</option>
+                            <option value="설치기사 문의" ${data.category === "설치기사 문의" ? "selected" : ""}>설치기사 문의</option>
+                            <option value="카드가맹문의" ${data.category === "카드가맹문의" ? "selected" : ""}>카드가맹문의</option>
+                            <option value="NTOSS" ${data.category === "NTOSS" ? "selected" : ""}>NTOSS</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>매장명:</label>
+                            <input type="text" name="storeName" value="${data.storeName || ""}" required>
+                        </div>
+                        <div>
+                            <label>고객명:</label>
+                            <input type="text" name="customerName" value="${data.customerName || ""}" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div>
+                            <label>인입시간:</label>
+                            <input type="datetime-local" name="startTime" value="${data.startTime || ""}" required>
+                            <button type="button" class="stamp-button">Stamp</button>
+                        </div>
+                        <div>
+                            <label>내용:</label>
+                            <textarea name="content" required>${data.content || ""}</textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div>
+                            <label>종료시간:</label>
+                            <input type="datetime-local" name="endTime" value="${data.endTime || ""}" required>
+                            <button type="button" class="stamp-button">Stamp</button>
+                        </div>
+                        <div>
+                            <label>조치사항:</label>
+                            <textarea name="actions" required>${data.actions || ""}</textarea>
+                        </div>
+                    </div>
+                    <div class="row" style="justify-content: flex-end;">
+                        <button type="button" class="save-button">저장</button>
+                        <button type="button" class="temp-save-button">임시저장</button>
+                        <button type="button" class="delete-button">삭제</button>
+                    </div>
+                </form>
+            `;
+
+            formTemplate.querySelectorAll(".stamp-button").forEach((button) => {
+                button.addEventListener("click", (event) => {
+                    const input = event.target.previousElementSibling;
+                    input.value = getCurrentTimestamp();
+                });
+            });
+
+            formTemplate.querySelector(".temp-save-button").addEventListener("click", () => {
+                const formData = new FormData(formTemplate.querySelector("form"));
+                const dataToSave = Object.fromEntries(formData.entries());
+                saveFormToLocalStorage(formId, dataToSave);
+                alert("임시저장되었습니다!");
+            });
+
+            formTemplate.querySelector(".save-button").addEventListener("click", async () => {
+                const formData = new FormData(formTemplate.querySelector("form"));
+                const dataToSend = Object.fromEntries(formData.entries());
+
+                //로그인된 사용자 아이디 추가
+                const loggedInUser = localStorage.getItem("loggedInUser");
+                if (loggedInUser) {
+                     dataToSend.loggedInUser = loggedInUser;
+               }
+
+                try {
+                    const response = await fetch("/submit", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(dataToSend),
+                    });
+                    if (response.ok) {
+                        alert("데이터가 성공적으로 저장되었습니다!");
+                        deleteFormFromLocalStorage(formId);
+                        formTemplate.querySelector("form").reset();
+                    } else {
+                        alert("데이터 저장에 실패했습니다.");
+                    }
+                } catch (error) {
+                    console.error("저장 요청 오류:", error);
+                    alert("저장 중 오류가 발생했습니다.");
+                }
+            });
+
+            formTemplate.querySelector(".delete-button").addEventListener("click", () => {
+                currentFormToDelete = formTemplate;
+                deleteModal.style.display = "flex";
+            });
+
+            formArea.appendChild(formTemplate);
+            formCount++;
+        }
+
+        confirmDeleteBtn.addEventListener("click", () => {
+            if (currentFormToDelete) {
+                const formId = currentFormToDelete.dataset.formId;
+                formArea.removeChild(currentFormToDelete);
+                formCount--;
+                deleteFormFromLocalStorage(formId);
+                currentFormToDelete = null;
+                deleteModal.style.display = "none";
+            }
+        });
+
+        cancelDeleteBtn.addEventListener("click", () => {
+            deleteModal.style.display = "none";
+        });
+
+        addFormButton.addEventListener("click", () => addForm());
+        window.addEventListener("load", loadFormsFromLocalStorage);
+    </script>
+</body>
+</html>
