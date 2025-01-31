@@ -181,7 +181,7 @@ app.post("/overtime-submit", async (req, res) => {
     try {
         await sheets.spreadsheets.values.append({
             spreadsheetId: SPREADSHEET_ID,
-            range: "overtime!A1",
+            range: "overtime!A2",
             valueInputOption: "RAW",
             resource: {
                 values: [[employeeName, startTime, endTime, totalHours]],
@@ -191,6 +191,26 @@ app.post("/overtime-submit", async (req, res) => {
     } catch (error) {
         console.error("Google Sheets 저장 실패:", error);
         res.status(500).send("야근 기록 저장 실패");
+    }
+});
+
+// ----- 설치일정등록 API (installation.html) -----
+app.post("/new-data-submit", async (req, res) => {
+    const { storeName, ownerName, product, vanCompany, remoteInterval, installDate, notes } = req.body;
+
+    try {
+        await sheets.spreadsheets.values.append({
+            spreadsheetId: SPREADSHEET_ID,
+            range: "installation!A2",
+            valueInputOption: "RAW",
+            resource: {
+                values: [[storeName, ownerName, product, vanCompany, remoteInterval, installDate, notes]],
+            },
+        });
+        res.send("설치일정 등록 완료!");
+    } catch (error) {
+        console.error("Google Sheets 저장 실패:", error);
+        res.status(500).send("설치일정 등록 실패");
     }
 });
 
