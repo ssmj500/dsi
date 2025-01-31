@@ -150,18 +150,18 @@
             </div>
 
             <div class="form-group">
-                <label for="van-company">VAN사</label>
-                <select id="van-company" name="vanCompany" required>
+                <label for="vanCompany">VAN사</label>
+                <select id="vanCompany" name="vanCompany" required>
                     <option value="--">--</option>
                     <option value="KPN">KPN</option>
                     <option value="KIS">KIS</option>
                 </select>
             </div>
 
-            <div class="form-group">
+            <div class="formGroup">
                 <label>원격업무구간</label>
-                <div class="form-group">
-                    <div class="checkbox-group">
+                <div class="formGroup">
+                    <div class="checkboxgroup">
                         <label><input type="checkbox" name="remote" value="서류취합 완료"> 서류취합 완료</label>
                         <label><input type="checkbox" name="remote" value="가맹점심사 완료"> 가맹점심사 완료</label>
                         <label><input type="checkbox" name="remote" value="전산등록 완료"> 전산등록 완료</label>
@@ -194,24 +194,24 @@
         document.getElementById('new-data-form').addEventListener('submit', async (event) => {
             event.preventDefault();
 
-            const formData = {
-                storeName: document.getElementById('storeName').value,
-                ownerName: document.getElementById('ownerName').value,
-                product: document.getElementById('product').value,
-                vanCompany: document.getElementById('van-company').value,
-                installDate: document.getElementById('installDate').value,
-                notes: document.getElementById('notes').value,
-                remoteInterval: Array.from(document.querySelectorAll("input[name='remote']:checked"))
-                                     .map(checkbox => checkbox.value)
-                                     .join(', ')
-            };
+        const remoteInterval = Array.from(document.querySelectorAll("input[name='remote']:checked"))
+                                   .map(checkbox => checkbox.value)
+                                   .join(', ') || "미선택"; // 기본값 추가
+
+        const formData = {
+            storeName: document.getElementById('storeName').value,
+            ownerName: document.getElementById('ownerName').value,
+            product: document.getElementById('product').value,
+            vanCompany: document.getElementById('vanCompany').value,
+            remoteInterval: remoteInterval,
+            installDate: document.getElementById('installDate').value,
+            notes: document.getElementById('notes').value,
+        };
 
             try {
                 const response = await fetch('/new-data-submit', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: {'Content-Type': 'application/json',},
                     body: JSON.stringify(formData),
                 });
 
